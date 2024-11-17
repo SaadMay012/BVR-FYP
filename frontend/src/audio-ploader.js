@@ -19,7 +19,7 @@ export default function AudioUploader() {
           "Content-Type": "multipart/form-data",
         },
       });
-      console.log("Response from server:", response.data);
+      setResult(response.data.result);
     } catch (error) {
       console.error("Error uploading file:", error);
     }

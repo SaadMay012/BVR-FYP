@@ -21,10 +21,10 @@ app.post("/upload", upload.single("file"), (req, res) => {
   
   // Call Python script
   const pythonProcess = spawn(pythonExecutable, ["Bird Classification Model.py", filePath]);
-
   let result = "";
   pythonProcess.stdout.on("data", (data) => {
-    result += data.toString();
+    result = data.toString();
+    
   });
 
   pythonProcess.stderr.on("data", (data) => {
@@ -33,6 +33,7 @@ app.post("/upload", upload.single("file"), (req, res) => {
 
   pythonProcess.on("close", (code) => {
     fs.unlinkSync(filePath);
+    //console.log(result)
 
     if (code === 0) {
       res.json({ result: result.trim() });

@@ -2,8 +2,11 @@ import os
 import librosa
 import numpy as np
 import pandas as pd
-
-folder_path = '/content'
+import sys
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.preprocessing import LabelEncoder
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import classification_report, accuracy_score
 
 def extract_features(file_name):
     try:
@@ -28,30 +31,8 @@ def extract_features(file_name):
     except Exception as e:
         print(f"Error encountered while parsing file: {file_name}. Error: {e}")
         return None
-
-data = []
-labels = []
-
-for file_name in os.listdir(folder_path):
-    if file_name.endswith(".mp3") or file_name.endswith(".wav"):
-        file_path = os.path.join(folder_path, file_name)
-        features = extract_features(file_path)
-        if features is not None:
-            data.append(features)
-            bird_name = file_name.split('-')[1].strip()
-            labels.append(bird_name)
-
-df = pd.DataFrame(data)
-df['label'] = labels
-
+    
 output_csv = 'bird_voice_features.csv'
-df.to_csv(output_csv, index=False)
-print(f"Features extracted and saved to {output_csv}")
-
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.preprocessing import LabelEncoder
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import classification_report, accuracy_score
 
 df = pd.read_csv(output_csv)
 
@@ -74,7 +55,7 @@ accuracy = accuracy_score(y_test, y_pred)
 print(f"Test Accuracy: {accuracy:.4f}")
 
 
-new_file_path = '/home/anonymousje/Downloads/backend/backend/uploads/XC467432 - Asian Barred Owlet - Glaucidium cuculoides.mp3'
+new_file_path = sys.argv[1]                                 #'/home/anonymousje/Downloads/backend/backend/uploads/XC467432 - Asian Barred Owlet - Glaucidium cuculoides.mp3'
 new_features = extract_features(new_file_path).reshape(1, -1)
 
 prediction = clf.predict(new_features)
