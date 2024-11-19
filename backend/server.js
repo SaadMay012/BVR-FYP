@@ -4,7 +4,7 @@ const cors = require("cors");
 const { spawn } = require("child_process");
 const fs = require("fs");
 
-const pythonExecutable = "/home/anonymousje/Downloads/backend/backend/venv/bin/python" 
+#const pythonExecutable = "/home/anonymousje/Downloads/backend/backend/venv/bin/python" 
 
 const app = express();
 const upload = multer({ dest: "uploads/" }); // Uploaded files will be saved in 'uploads'
@@ -20,7 +20,7 @@ app.post("/upload", upload.single("file"), (req, res) => {
   const filePath = req.file.path; 
   
   // Call Python script
-  const pythonProcess = spawn(pythonExecutable, ["Bird Classification Model.py", filePath]);
+  const pythonProcess = spawn("python3", ["Bird Classification Model.py", filePath]);
   let result = "";
   pythonProcess.stdout.on("data", (data) => {
     result = data.toString();
